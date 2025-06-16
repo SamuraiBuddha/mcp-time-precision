@@ -4,7 +4,7 @@ Time precision tools implementation.
 
 import time
 import platform
-from datetime import datetime, timezone
+from datetime import datetime, timezone as dt_timezone
 from typing import Any, Dict, Optional, Union
 
 import pytz
@@ -28,9 +28,10 @@ async def get_precise_time(
     now_float = time.time()
     
     # Convert to datetime
-    dt = datetime.fromtimestamp(now_float, tz=timezone.utc)
+    dt = datetime.fromtimestamp(now_float, tz=dt_timezone.utc)
     
     # Apply timezone if specified
+    tz_name = None
     if timezone:
         try:
             tz = pytz.timezone(timezone)
@@ -94,7 +95,7 @@ async def get_instance_info(
     uptime_seconds = current_time - start_time
     
     # Format start time with microseconds
-    start_dt = datetime.fromtimestamp(start_time, tz=timezone.utc)
+    start_dt = datetime.fromtimestamp(start_time, tz=dt_timezone.utc)
     start_timestamp = start_dt.strftime("%Y-%m-%dT%H:%M:%S.%f")
     
     return {
@@ -143,7 +144,7 @@ async def convert_time_precision(
     
     # Convert to desired output format
     if output_format == "iso":
-        dt = datetime.fromtimestamp(epoch_seconds, tz=timezone.utc)
+        dt = datetime.fromtimestamp(epoch_seconds, tz=dt_timezone.utc)
         if timezone:
             try:
                 tz = pytz.timezone(timezone)
