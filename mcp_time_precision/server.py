@@ -11,7 +11,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 import mcp.types as types
-from mcp.server import Server
+from mcp.server import Server, NotificationOptions
 from mcp.server.models import InitializationOptions
 from mcp.server.stdio import stdio_server
 
@@ -21,6 +21,7 @@ from .tools import (
     get_instance_info,
     convert_time_precision,
 )
+
 
 logger = logging.getLogger(__name__)
 
@@ -163,9 +164,12 @@ class TimePrecisionServer:
         async with stdio_server() as (read_stream, write_stream):
             logger.info(f"Time Precision Server running (Instance: {self.instance_id})")
             
+            # Create NotificationOptions with default values
+            notification_options = NotificationOptions()
+            
             # Create capabilities with required parameters for new MCP SDK
             capabilities = self.server.get_capabilities(
-                notification_options=None,
+                notification_options=notification_options,
                 experimental_capabilities={}
             )
             
