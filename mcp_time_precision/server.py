@@ -163,10 +163,16 @@ class TimePrecisionServer:
         async with stdio_server() as (read_stream, write_stream):
             logger.info(f"Time Precision Server running (Instance: {self.instance_id})")
             
+            # Create capabilities with required parameters for new MCP SDK
+            capabilities = self.server.get_capabilities(
+                notification_options=None,
+                experimental_capabilities={}
+            )
+            
             initialization_options = InitializationOptions(
                 server_name="time-precision",
                 server_version="0.1.0",
-                capabilities=self.server.get_capabilities()
+                capabilities=capabilities
             )
             
             await self.server.run(
